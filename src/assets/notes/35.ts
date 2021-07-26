@@ -4,9 +4,8 @@ export const bmsSource = `
 #PLAYER 3
 #GENRE Arm + Leg
 #TITLE Fit Battle
-#ARTIST 1
 #BPM 152.7
-#PLAYLEVEL 3
+#PLAYLEVEL 1
 #RANK 3
 
 #SUBTITLE Super Advanced
