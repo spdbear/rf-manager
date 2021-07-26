@@ -14,15 +14,15 @@
 import { h, defineComponent, ref } from "vue";
 import Header from "./components/Header.vue";
 import Viewer from "./components/Viewer.vue";
-import { NDataTable } from "naive-ui";
+import { NDataTable, NTag } from "naive-ui";
 
 type SongData = {
   id: number;
   name_ja: string;
   name_en: string;
   length: number;
-  bpm: number;
-  notes: (number | string)[];
+  bpm: number | string;
+  notes: number[];
   movie: string[];
 };
 
@@ -46,24 +46,23 @@ export default defineComponent({
       {
         title: "ノーツ数",
         key: "notes",
-        children: [
-          {
-            title: "初級",
-            key: "notes",
-          },
-          {
-            title: "上級",
-            key: 1,
-          },
-          {
-            title: "超上級",
-            key: 2,
-          },
-          {
-            title: "極上級",
-            key: 3,
-          },
-        ],
+        render(row: SongData) {
+          const notes = row.notes.map((tagKey, i) => {
+            return h(
+              NTag,
+              {
+                style: {
+                  marginRight: "6px",
+                },
+                type: "info",
+              },
+              {
+                default: () => `${tagKey}`,
+              }
+            );
+          });
+          return notes;
+        },
       },
     ];
     const songList = ref<SongData[]>([]);
