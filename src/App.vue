@@ -22,7 +22,7 @@ type SongData = {
   name_en: string;
   length: number;
   bpm: number;
-  notes: number[];
+  notes: (number | string)[];
   movie: string[];
 };
 
