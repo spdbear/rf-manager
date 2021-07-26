@@ -1,6 +1,4 @@
 <template>
-  <h1>{{ msg }}</h1>
-
   <p>See <code>README.md</code> for more information.</p>
 
   <n-button @click="count++">count is: {{ count }}</n-button>
@@ -9,19 +7,24 @@
 <script lang="ts">
 import { ref, defineComponent } from "vue";
 import { NButton } from "naive-ui";
+import { bmsSource } from "../assets/notes/35";
+// import { Compiler, SongInfo, Notes } from "bms";
+
 export default defineComponent({
-  name: "HelloWorld",
+  name: "Viewer",
   components: {
     NButton,
   },
-  props: {
-    msg: {
-      type: String,
-      required: true,
-    },
-  },
   setup: () => {
     const count = ref(0);
+
+    // const compileResult = Compiler.compile(bmsSource);
+    // const chart = compileResult.chart;
+    // const info = SongInfo.fromBMSChart(chart);
+    // const notes = Notes.fromBMSChart(chart);
+    // console.log(info);
+    // const hasColumnNotes = notes.all().filter((n) => n.column);
+    // console.log(hasColumnNotes);
     return { count };
   },
 });

@@ -1,18 +1,91 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+  <Header msg="リングフィットアドベンチャー リズムゲーム まとめ" />
+  <NDataTable
+    class="table"
+    :columns="columns"
+    :data="data"
+    :row-props="rowProps"
+    :max-height="1000"
+  />
+  <Viewer />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import { h, defineComponent, ref } from "vue";
+import Header from "./components/Header.vue";
+import Viewer from "./components/Viewer.vue";
+import { NDataTable } from "naive-ui";
+
+type SongData = {
+  id: number;
+  name_ja: string;
+  name_en: string;
+  length: number;
+  bpm: number;
+  notes: number[];
+  movie: string[];
+};
 
 export default defineComponent({
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-})
+    Header,
+    Viewer,
+    NDataTable,
+  },
+  setup: () => {
+    const columns = [
+      {
+        title: "曲名",
+        key: "name_ja",
+      },
+      {
+        title: "演奏時間",
+        key: "length",
+      },
+      {
+        title: "ノーツ数",
+        key: "notes",
+        children: [
+          {
+            title: "初級",
+            key: "notes",
+          },
+          {
+            title: "上級",
+            key: 1,
+          },
+          {
+            title: "超上級",
+            key: 2,
+          },
+          {
+            title: "極上級",
+            key: 3,
+          },
+        ],
+      },
+    ];
+    const songList = ref<SongData[]>([]);
+    fetch("https://api.sssapi.app/KeQDsJSy3pn3levK3pvKz")
+      .then((response) => response.json())
+      .then((data) => {
+        songList.value = data as SongData[];
+      });
+    return {
+      rowProps: (row) => {
+        return {
+          style: "cursor: pointer;",
+          onClick: () => {
+            console.info(row.id);
+          },
+        };
+      },
+      columns,
+      data: songList,
+    };
+  },
+});
 </script>
 
 <style>
@@ -23,5 +96,11 @@ export default defineComponent({
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.table {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
 }
 </style>
