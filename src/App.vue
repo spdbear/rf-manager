@@ -72,7 +72,7 @@ export default defineComponent({
         songList.value = data as SongData[];
       });
     return {
-      rowProps: (row) => {
+      rowProps: (row: any) => {
         return {
           style: "cursor: pointer;",
           onClick: () => {
