@@ -8,83 +8,103 @@
     :max-height="1000"
   />
   <Viewer />
+  <SongModal
+    :is-open="isOpenSongModal"
+    :song-info="data.find((song) => song.id === songId)"
+    @maskClick="closeSongModal"
+  />
 </template>
 
 <script lang="ts">
-import { h, defineComponent, ref } from "vue";
-import Header from "./components/Header.vue";
-import Viewer from "./components/Viewer.vue";
-import { NDataTable, NTag } from "naive-ui";
+import { h, defineComponent, ref } from 'vue'
+import Header from './components/Header.vue'
+import Viewer from './components/Viewer.vue'
+import { NDataTable, NTag } from 'naive-ui'
+import SongModal from './components/SongModal.vue'
 
-type SongData = {
-  id: number;
-  name_ja: string;
-  name_en: string;
-  length: number;
-  bpm: number | string;
-  notes: number[];
-  movie: string[];
-};
+export type SongData = {
+  id: number
+  name_ja: string
+  name_en: string
+  length: number
+  bpm: number | string
+  notes: number[]
+  movie: string[]
+}
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   components: {
     Header,
     Viewer,
     NDataTable,
+    SongModal,
   },
   setup: () => {
     const columns = [
       {
-        title: "曲名",
-        key: "name_ja",
+        title: '曲名',
+        key: 'name_ja',
       },
       {
-        title: "演奏時間",
-        key: "length",
+        title: '演奏時間',
+        key: 'length',
       },
       {
-        title: "ノーツ数",
-        key: "notes",
+        title: 'ノーツ数',
+        key: 'notes',
         render(row: SongData) {
           const notes = row.notes.map((tagKey, i) => {
             return h(
               NTag,
               {
                 style: {
-                  marginRight: "6px",
+                  marginRight: '6px',
                 },
-                type: "info",
+                type: 'info',
               },
               {
                 default: () => `${tagKey}`,
               }
-            );
-          });
-          return notes;
+            )
+          })
+          return notes
         },
       },
-    ];
-    const songList = ref<SongData[]>([]);
-    fetch("https://api.sssapi.app/KeQDsJSy3pn3levK3pvKz")
+    ]
+    const songList = ref<SongData[]>([])
+    fetch('https://api.sssapi.app/KeQDsJSy3pn3levK3pvKz')
       .then((response) => response.json())
       .then((data) => {
-        songList.value = data as SongData[];
-      });
+        songList.value = data as SongData[]
+      })
+
+    const isOpenSongModal = ref(false)
+    const closeSongModal = () => {
+      console.log('close')
+      isOpenSongModal.value = false
+    }
+    const songId = ref(1)
+
     return {
       rowProps: (row: any) => {
         return {
-          style: "cursor: pointer;",
+          style: 'cursor: pointer;',
           onClick: () => {
-            console.info(row.id);
+            console.info(row.id)
+            songId.value = row.id
+            isOpenSongModal.value = true
           },
-        };
+        }
       },
       columns,
+      songId,
       data: songList,
-    };
+      isOpenSongModal,
+      closeSongModal,
+    }
   },
-});
+})
 </script>
 
 <style>
