@@ -25,9 +25,7 @@
         参考動画
         <div class="video-container">
           <iframe
-            :src="`https://www.youtube.com/embed/${getYouTubeId(
-              songInfo.movie[currentDif]
-            )}`"
+            :src="youTubeUrl"
             class="video"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -81,7 +79,24 @@ export default defineComponent({
 
       return match && match[2].length === 11 ? match[2] : null
     }
-    return { currentDif, setDifficulty, getYouTubeId, handleClickNotesViewer }
+    const getStartTime = (url: string) => {
+      const regExp = /&t=(.+)s$/
+      const match = url.match(regExp)
+
+      return match ? match[1] : '0'
+    }
+    const youTubeUrl = computed(
+      () =>
+        `https://www.youtube.com/embed/${getYouTubeId(
+          props.songInfo.movie[currentDif.value]
+        )}?start=${getStartTime(props.songInfo.movie[currentDif.value])}`
+    )
+    return {
+      currentDif,
+      setDifficulty,
+      youTubeUrl,
+      handleClickNotesViewer,
+    }
   },
 })
 </script>
