@@ -4,12 +4,8 @@
 
 <script lang="ts">
 import { ref, defineComponent } from "vue";
-import { NButton } from "naive-ui";
 export default defineComponent({
   name: "Header",
-  components: {
-    NButton,
-  },
   props: {
     msg: {
       type: String,
@@ -17,8 +13,6 @@ export default defineComponent({
     },
   },
   setup: () => {
-    const count = ref(0);
-    return { count };
   },
 });
 </script>

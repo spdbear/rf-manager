@@ -7,18 +7,17 @@
     :row-props="rowProps"
     :max-height="1000"
   />
-  <Viewer />
   <SongModal
     :is-open="isOpenSongModal"
     :song-info="data.find((song) => song.id === songId)"
     @maskClick="closeSongModal"
+    @clickNotesViewer="showNotesViewer"
   />
 </template>
 
 <script lang="ts">
 import { h, defineComponent, ref } from 'vue'
 import Header from './components/Header.vue'
-import Viewer from './components/Viewer.vue'
 import { NDataTable, NTag } from 'naive-ui'
 import SongModal from './components/SongModal.vue'
 
@@ -36,7 +35,6 @@ export default defineComponent({
   name: 'App',
   components: {
     Header,
-    Viewer,
     NDataTable,
     SongModal,
   },
@@ -46,31 +44,31 @@ export default defineComponent({
         title: '曲名',
         key: 'name_ja',
       },
-      {
-        title: '演奏時間',
-        key: 'length',
-      },
-      {
-        title: 'ノーツ数',
-        key: 'notes',
-        render(row: SongData) {
-          const notes = row.notes.map((tagKey, i) => {
-            return h(
-              NTag,
-              {
-                style: {
-                  marginRight: '6px',
-                },
-                type: 'info',
-              },
-              {
-                default: () => `${tagKey}`,
-              }
-            )
-          })
-          return notes
-        },
-      },
+      // {
+      //   title: '演奏時間',
+      //   key: 'length',
+      // },
+      // {
+      //   title: 'ノーツ数',
+      //   key: 'notes',
+      //   render(row: SongData) {
+      //     const notes = row.notes.map((tagKey, i) => {
+      //       return h(
+      //         NTag,
+      //         {
+      //           style: {
+      //             marginRight: '6px',
+      //           },
+      //           type: 'info',
+      //         },
+      //         {
+      //           default: () => `${tagKey}`,
+      //         }
+      //       )
+      //     })
+      //     return notes
+      //   },
+      // },
     ]
     const songList = ref<SongData[]>([])
     fetch('https://api.sssapi.app/KeQDsJSy3pn3levK3pvKz')
@@ -85,6 +83,10 @@ export default defineComponent({
       isOpenSongModal.value = false
     }
     const songId = ref(1)
+
+    const showNotesViewer = (dif: number) => {
+      console.log(dif)
+    }
 
     return {
       rowProps: (row: any) => {
@@ -102,6 +104,7 @@ export default defineComponent({
       data: songList,
       isOpenSongModal,
       closeSongModal,
+      showNotesViewer,
     }
   },
 })

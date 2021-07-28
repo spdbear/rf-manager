@@ -19,8 +19,10 @@
       <div class="song-info">演奏時間: {{ songInfo.length }}</div>
       <div class="song-info">ノーツ数: {{ songInfo.notes[currentDif] }}</div>
 
+      <NButton @click="handleClickNotesViewer">譜面確認</NButton>
+
       <template #footer>
-        演奏動画
+        参考動画
         <div class="video-container">
           <iframe
             :src="`https://www.youtube.com/embed/${getYouTubeId(
@@ -38,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, SetupContext, PropType, watch } from 'vue'
+import { ref, defineComponent, SetupContext, PropType, computed } from 'vue'
 import { NButton, NModal, NCard } from 'naive-ui'
 import { SongData } from '../App.vue'
 
@@ -65,6 +67,13 @@ export default defineComponent({
       console.log(dif)
       currentDif.value = dif
     }
+    const imgSrc = computed(() => 'https://i.imgur.com/N9GiLVH.png')
+
+    const handleClickNotesViewer = () => {
+      context.emit('onClickNotesViewer', currentDif.value)
+      window.open(imgSrc.value, '_blank')
+    }
+
     const getYouTubeId = (url: string) => {
       const regExp =
         /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
@@ -72,7 +81,7 @@ export default defineComponent({
 
       return match && match[2].length === 11 ? match[2] : null
     }
-    return { currentDif, setDifficulty, getYouTubeId }
+    return { currentDif, setDifficulty, getYouTubeId, handleClickNotesViewer }
   },
 })
 </script>
